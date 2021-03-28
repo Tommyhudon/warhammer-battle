@@ -16,6 +16,6 @@ public class CreateUnit {
     }
 
     public void create(Unit unit) {
-        unitRepository.create(unit.name, unit);
+        unitRepository.create(unit.getName(), unit);
     }
 }

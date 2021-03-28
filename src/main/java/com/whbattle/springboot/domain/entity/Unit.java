@@ -2,16 +2,18 @@ package com.whbattle.springboot.domain.entity;
 
 public class Unit {
 
-    public String name;
-    public int number;
-    public int save;
+    private String name;
+    private int number;
+    private int save;
 
     //objet pour arme ?
-    public int attacks;
-    public int toHit;
-    public int toWound;
-    public int rend;
-    public int damage;
+    private int attacks;
+    private int toHit;
+    private int toWound;
+    private int rend;
+    private int damage;
+
+    private final Die die = new Die();
 
     public Unit(String name, int number, int save, int attacks, int toHit, int toWound, int rend, int damage) {
         this.name = name;
@@ -24,67 +26,72 @@ public class Unit {
         this.damage = damage;
     }
 
-    private String getName() {
+    public boolean isDead() {
+        return number <= 0;
+    }
+
+    public int rollAttacks() {
+       int successfulHits = this.rollHits();
+       int successfulWounds = this.rollWounds(successfulHits);
+       return successfulWounds;
+    }
+
+    private int rollHits() {
+        int successfulHits = 0;
+
+        for (int i = 0; i < number * attacks; i++) {
+            int roll = die.roll();
+
+            if (roll >= this.toHit) {
+                successfulHits ++;
+            }
+        }
+
+        return successfulHits;
+    }
+
+    private int rollWounds(int numberOfRoll) {
+        int successfulWounds = 0;
+
+        for(int i = 0; i < numberOfRoll; i ++){
+            int roll = die.roll();
+
+            if (roll >= this.toWound ) {
+                successfulWounds ++;
+            }
+        }
+
+        return successfulWounds * this.damage;
+    }
+
+    public void rollSaves(int numberOfRoll, int rend) {
+
+        for(int j = 0; j < numberOfRoll; j ++){
+            int roll = die.roll();
+
+            if (roll < this.save + rend) {
+                this.number--;
+            }
+        }
+    }
+
+    @Override
+    public Unit clone() {
+        return new Unit(this.name,
+        this.number,
+        this.save,
+        this.attacks,
+        this.toHit,
+        this.toWound,
+        this.rend,
+        this.damage);
+    }
+
+    public String getName() {
         return name;
     }
 
-    private void setName(String name) {
-        this.name = name;
-    }
-
-    private int getNumber() {
-        return number;
-    }
-
-    private void setNumber(int number) {
-        this.number = number;
-    }
-
-    private int getSave() {
-        return save;
-    }
-
-    private void setSave(int save) {
-        this.save = save;
-    }
-
-    private int getAttacks() {
-        return attacks;
-    }
-
-    private void setAttacks(int attacks) {
-        this.attacks = attacks;
-    }
-
-    private int getToHit() {
-        return toHit;
-    }
-
-    private void setToHit(int toHit) {
-        this.toHit = toHit;
-    }
-
-    private int getToWound() {
-        return toWound;
-    }
-
-    private void setToWound(int toWound) {
-        this.toWound = toWound;
-    }
-
-    private int getRend() {
+    public int getRend() {
         return rend;
-    }
-
-    private void setRend(int rend) {
-        this.rend = rend;
-    }
-
-    private int getDamage() {
-        return damage;
-    }
-
-    private void setDamage(int damage) {
-        this.damage = damage;
     }
 }

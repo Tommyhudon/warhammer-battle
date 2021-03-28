@@ -15,6 +15,6 @@ public class UpdateUnit {
     }
 
     public Unit update(Unit unit) {
-        return unitRepository.update(unit.name, unit);
+        return unitRepository.update(unit.getName(), unit);
     }
 }
