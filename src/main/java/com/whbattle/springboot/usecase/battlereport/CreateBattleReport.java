@@ -12,7 +12,7 @@ import java.util.List;
 public class CreateBattleReport {
 
     @Autowired
-    public CreateBattleReport(){}
+    public CreateBattleReport(){ }
 
     public BattleReport create(Unit[] units) {
         int nbOfWin = 0;
@@ -25,7 +25,7 @@ public class CreateBattleReport {
             }
         }
         float probability = (float) nbOfWin/NUMBER_OF_BATTLE;
-        return new BattleReport(probability);
+        return new BattleReport(probability, units[0], units[1]);
     }
 
     private Unit battle(List<Unit> units) {
@@ -33,7 +33,7 @@ public class CreateBattleReport {
 
         while(units.size() >= 2) {
             int successfulAttacks = units.get(0).rollAttacks();
-            units.get(1).rollSaves(successfulAttacks, units.get(0).getRend());
+            units.get(1).resolveDamage(successfulAttacks, units.get(0).getRend(), units.get(0).getDamage());
 
             if (units.get(0).isDead()) {
                 winner = units.get(1);
@@ -41,7 +41,7 @@ public class CreateBattleReport {
             }
 
             successfulAttacks = units.get(1).rollAttacks();
-            units.get(0).rollSaves(successfulAttacks, units.get(1).getRend());
+            units.get(0).resolveDamage(successfulAttacks, units.get(1).getRend(), units.get(1).getDamage());
 
             if (units.get(1).isDead()) {
                 winner = units.get(0);

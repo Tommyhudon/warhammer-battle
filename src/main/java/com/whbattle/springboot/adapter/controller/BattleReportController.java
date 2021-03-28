@@ -25,6 +25,6 @@ public class BattleReportController {
             @RequestBody Unit[] unit) {
 
         BattleReport battleReport = createBattleReport.create(unit);
-        return new ResponseEntity<BattleReport>(battleReport, HttpStatus.OK);
+        return new ResponseEntity<String>(battleReport.battleReportMessage(), HttpStatus.OK);
     }
 }
