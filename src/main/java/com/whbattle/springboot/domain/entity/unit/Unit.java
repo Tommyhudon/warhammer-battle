@@ -12,16 +12,18 @@ public class Unit {
     private final int wound;
     private int totalWounds;
     private final Weapon weapon;
+    private final ReRoll reRoll;
 
     private final Die die = new Die();
 
-    public Unit(String name, int number, int save, int wound, int totalWounds, Weapon weapon) {
+    public Unit(String name, int number, int save, int wound, int totalWounds, Weapon weapon, ReRoll reRoll) {
         this.name = name;
         this.number = number;
         this.save = save;
         this.wound = wound;
         this.totalWounds = totalWounds;
         this.weapon = weapon;
+        this.reRoll = reRoll;
     }
 
     public boolean isDead() {
@@ -29,9 +31,9 @@ public class Unit {
     }
 
     public Attack rollAttacks() {
-        int successfulHits = this.weapon.rollHits(this.number);
-        int succesfulWounds = this.weapon.rollWounds(successfulHits);
-        return new Attack(succesfulWounds, this.weapon.getDamage(), this.weapon.getRend());
+        int successfulHits = this.weapon.rollHits(this.number,this.reRoll.isReRollHits());
+        int successfulWounds = this.weapon.rollWounds(successfulHits, this.reRoll.isReRollWounds());
+        return new Attack(successfulWounds, this.weapon.getDamage(), this.weapon.getRend());
     }
 
     public void resolveDamage(Attack attack) {
@@ -47,6 +49,12 @@ public class Unit {
 
             if (roll < this.save + rend) {
                 failedSaves++;
+            } else if (this.reRoll.isReRollSaves()){
+                roll = die.roll();
+
+                if (roll < this.save + rend) {
+                    failedSaves++;
+                }
             }
         }
 
@@ -66,7 +74,8 @@ public class Unit {
                 this.save,
                 this.wound,
                 this.totalWounds,
-                this.weapon);
+                this.weapon,
+                this.reRoll);
     }
 
     public String getName() {
@@ -75,13 +84,5 @@ public class Unit {
 
     public int getNumber() {
         return number;
-    }
-
-    public int getAttackDamage() {
-        return weapon.getDamage();
-    }
-
-    public int getAttackRend() {
-        return weapon.getRend();
     }
 }

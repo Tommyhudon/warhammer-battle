@@ -19,7 +19,7 @@ public class Weapon {
         this.damage = damage;
     }
 
-    public int rollHits(int numberOfAttacker) {
+    public int rollHits(int numberOfAttacker, boolean reRoll) {
         int successfulHits = 0;
 
         for (int i = 0; i < numberOfAttacker * attacks; i++) {
@@ -27,20 +27,24 @@ public class Weapon {
 
             if (roll >= this.toHit) {
                 successfulHits ++;
+            } else if (reRoll) {
+                successfulHits = successfulHits + this.rollHits(1, false);
             }
         }
 
         return successfulHits;
     }
 
-    public int rollWounds(int numberOfRoll) {
+    public int rollWounds(int numberOfRoll, boolean reRoll) {
         int successfulWounds = 0;
 
-        for(int i = 0; i < numberOfRoll; i ++){
+        for (int i = 0; i < numberOfRoll; i ++){
             int roll = die.roll();
 
             if (roll >= this.toWound ) {
                 successfulWounds ++;
+            } else if (reRoll) {
+                successfulWounds = successfulWounds + this.rollWounds(1, false);
             }
         }
 
