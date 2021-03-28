@@ -16,7 +16,7 @@ public class CreateBattleReport {
 
     public BattleReport create(Unit[] units) {
         int nbOfWin = 0;
-        int NUMBER_OF_BATTLE = 1000;
+        int NUMBER_OF_BATTLE = 10000;
 
         for (int i = 0; i < NUMBER_OF_BATTLE; i++) {
 

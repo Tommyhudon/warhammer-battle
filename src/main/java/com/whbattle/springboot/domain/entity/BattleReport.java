@@ -17,6 +17,6 @@ public class BattleReport {
                 this.friendlyUnit.getNumber() +  " " + this.friendlyUnit.getName() +
                 " to win against " +
                 this.enemyUnit.getNumber() + " " + this.enemyUnit.getName() +
-                " are of : " + this.probabilityOfWinning * 100 + "%";
+                " are approximately : " + this.probabilityOfWinning * 100 + "%";
     }
 }

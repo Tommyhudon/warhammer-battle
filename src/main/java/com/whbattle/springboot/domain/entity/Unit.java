@@ -1,5 +1,7 @@
 package com.whbattle.springboot.domain.entity;
 
+import static java.lang.Math.ceil;
+
 public class Unit {
 
     private final String name;
@@ -88,10 +90,8 @@ public class Unit {
     }
 
     private void resolvesWounds(int failedSaves, int attackDamage) {
-        int numberOfDamage = failedSaves * attackDamage;
-        this.totalWounds = this.totalWounds - numberOfDamage;
-
-        this.number = this.number - numberOfDamage/this.wound;
+        this.totalWounds = this.totalWounds - failedSaves * attackDamage;
+        this.number = (int) Math.ceil( (float) totalWounds/wound);
     }
 
     @Override
