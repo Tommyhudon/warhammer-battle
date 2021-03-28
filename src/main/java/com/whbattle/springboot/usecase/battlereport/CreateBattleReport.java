@@ -6,8 +6,7 @@ import com.whbattle.springboot.domain.entity.unit.attack.Attack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class CreateBattleReport {
@@ -19,12 +18,16 @@ public class CreateBattleReport {
         int nbOfWin = 0;
         int NUMBER_OF_BATTLE = 10000;
 
-        for (int i = 0; i < NUMBER_OF_BATTLE; i++) {
 
-            if (this.battle(this.cloneUnits(units)).getName().equals(units[0].getName())) {
+        for (int i = 0; i < NUMBER_OF_BATTLE; i++) {
+            List<Unit> shuffledList = this.cloneUnits(units);
+            Collections.shuffle(shuffledList, new Random());
+
+            if (this.battle(shuffledList).getName().equals(shuffledList.get(0).getName())) {
                 nbOfWin++;
             }
         }
+
         float probability = (float) nbOfWin/NUMBER_OF_BATTLE;
         return new BattleReport(probability, units[0], units[1]);
     }

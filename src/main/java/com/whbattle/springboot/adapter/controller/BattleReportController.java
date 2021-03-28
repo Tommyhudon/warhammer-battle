@@ -20,7 +20,7 @@ public class BattleReportController {
         this.createBattleReport = createBattleReport;
     }
 
-    @PostMapping("/battle")
+    @PostMapping("/battle_report")
     public ResponseEntity battleUnit(
             @RequestBody Unit[] unit) {
 

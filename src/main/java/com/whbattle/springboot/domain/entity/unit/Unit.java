@@ -37,24 +37,20 @@ public class Unit {
     }
 
     public void resolveDamage(Attack attack) {
-        int failedSaves = this.rollSaves(attack.getSuccessfulAttacks(), attack.getRend());
+        int failedSaves = this.rollSaves(attack.getSuccessfulAttacks(), attack.getRend(), this.reRoll.isReRollSaves());
         this.resolvesWounds(failedSaves, attack.getDamagePerAttack());
     }
 
-    private int rollSaves(int numberOfRoll, int rend) {
+    private int rollSaves(int numberOfRoll, int rend, boolean reRoll) {
         int failedSaves = 0;
 
-        for(int j = 0; j < numberOfRoll; j ++){
+        for(int j = 0; j < numberOfRoll; j ++) {
             int roll = die.roll();
 
             if (roll < this.save + rend) {
                 failedSaves++;
-            } else if (this.reRoll.isReRollSaves()){
-                roll = die.roll();
-
-                if (roll < this.save + rend) {
-                    failedSaves++;
-                }
+            } else if (reRoll) {
+                failedSaves = failedSaves + this.rollSaves(1, rend, false);
             }
         }
 
