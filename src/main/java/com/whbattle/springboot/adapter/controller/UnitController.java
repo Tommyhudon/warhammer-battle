@@ -1,6 +1,6 @@
 package com.whbattle.springboot.adapter.controller;
 
-import com.whbattle.springboot.domain.entity.Unit;
+import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.usecase.unit.CreateUnit;
 import com.whbattle.springboot.usecase.unit.DeleteUnit;
 import com.whbattle.springboot.usecase.unit.FindUnit;

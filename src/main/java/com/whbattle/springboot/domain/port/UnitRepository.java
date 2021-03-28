@@ -1,6 +1,6 @@
 package com.whbattle.springboot.domain.port;
 
-import com.whbattle.springboot.domain.entity.Unit;
+import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.adapter.repository.Repository;
 
 import java.util.List;

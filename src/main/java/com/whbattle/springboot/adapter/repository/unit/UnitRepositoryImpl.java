@@ -1,6 +1,6 @@
 package com.whbattle.springboot.adapter.repository.unit;
 
-import com.whbattle.springboot.domain.entity.Unit;
+import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.domain.port.UnitRepository;
 import org.springframework.stereotype.Repository;
 

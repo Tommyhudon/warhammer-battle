@@ -1,7 +1,8 @@
 package com.whbattle.springboot.usecase.battlereport;
 
 import com.whbattle.springboot.domain.entity.BattleReport;
-import com.whbattle.springboot.domain.entity.Unit;
+import com.whbattle.springboot.domain.entity.unit.Unit;
+import com.whbattle.springboot.domain.entity.unit.attack.Attack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,16 +33,16 @@ public class CreateBattleReport {
         Unit winner = null;
 
         while(units.size() >= 2) {
-            int successfulAttacks = units.get(0).rollAttacks();
-            units.get(1).resolveDamage(successfulAttacks, units.get(0).getRend(), units.get(0).getDamage());
+            Attack attack = units.get(0).rollAttacks();
+            units.get(1).resolveDamage(attack);
 
             if (units.get(0).isDead()) {
                 winner = units.get(1);
                 break;
             }
 
-            successfulAttacks = units.get(1).rollAttacks();
-            units.get(0).resolveDamage(successfulAttacks, units.get(1).getRend(), units.get(1).getDamage());
+            attack = units.get(1).rollAttacks();
+            units.get(0).resolveDamage(attack);
 
             if (units.get(1).isDead()) {
                 winner = units.get(0);

@@ -1,7 +1,7 @@
 package com.whbattle.springboot.usecase.unit;
 
 import com.whbattle.springboot.adapter.repository.unit.UnitRepositoryImpl;
-import com.whbattle.springboot.domain.entity.Unit;
+import com.whbattle.springboot.domain.entity.unit.Unit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

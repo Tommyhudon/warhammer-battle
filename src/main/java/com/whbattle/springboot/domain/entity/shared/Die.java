@@ -1,4 +1,4 @@
-package com.whbattle.springboot.domain.entity;
+package com.whbattle.springboot.domain.entity.shared;
 
 import java.util.Random;
 

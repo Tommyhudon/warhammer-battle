@@ -1,5 +1,7 @@
 package com.whbattle.springboot.domain.entity;
 
+import com.whbattle.springboot.domain.entity.unit.Unit;
+
 public class BattleReport {
 
     public float probabilityOfWinning;
