@@ -1,6 +1,5 @@
 package com.whbattle.springboot.domain.entity.unit.weapon;
-
-import com.whbattle.springboot.domain.entity.shared.Die;
+import com.whbattle.springboot.domain.entity.unit.DiceRoller;
 
 public class Weapon {
     private final int attacks;
@@ -9,7 +8,7 @@ public class Weapon {
     private final int rend;
     private final int damage;
 
-    private final Die die = new Die();
+    private final DiceRoller diceRoller = new DiceRoller();
 
     public Weapon(int attacks, int toHit, int toWound, int rend, int damage) {
         this.attacks = attacks;
@@ -19,36 +18,18 @@ public class Weapon {
         this.damage = damage;
     }
 
-    public int rollHits(int numberOfAttacker, boolean reRoll) {
-        int successfulHits = 0;
-
-        for (int i = 0; i < numberOfAttacker * attacks; i++) {
-            int roll = die.roll();
-
-            if (roll >= this.toHit) {
-                successfulHits ++;
-            } else if (reRoll) {
-                successfulHits = successfulHits + this.rollHits(1, false);
-            }
+    public int rollHits(int numberOfAttacker, boolean reRoll, int rollModifier, int numberToReRoll) {
+        if (numberToReRoll != 0) {
+            return diceRoller.rollDice(numberOfAttacker * attacks, toHit, rollModifier, numberToReRoll);
         }
-
-        return successfulHits;
+        return diceRoller.rollDice(numberOfAttacker * attacks, toHit, rollModifier, reRoll);
     }
 
-    public int rollWounds(int numberOfRoll, boolean reRoll) {
-        int successfulWounds = 0;
-
-        for (int i = 0; i < numberOfRoll; i ++){
-            int roll = die.roll();
-
-            if (roll >= this.toWound ) {
-                successfulWounds ++;
-            } else if (reRoll) {
-                successfulWounds = successfulWounds + this.rollWounds(1, false);
-            }
+    public int rollWounds(int numberOfWounds, boolean reRoll, int rollModifier, int numberToReRoll) {
+        if (numberToReRoll != 0) {
+            return diceRoller.rollDice(numberOfWounds, toWound, rollModifier, numberToReRoll);
         }
-
-        return successfulWounds * this.damage;
+        return diceRoller.rollDice(numberOfWounds, toWound, rollModifier, reRoll);
     }
 
     public int getRend() {

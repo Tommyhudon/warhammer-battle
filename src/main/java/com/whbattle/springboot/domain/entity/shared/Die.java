@@ -8,7 +8,6 @@ public class Die {
     public Die() {}
 
     public int roll() {
-        int test = rand.nextInt(5) + 1;
-        return test;
+        return rand.nextInt(5) + 1;
     }
 }
