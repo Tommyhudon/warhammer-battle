@@ -8,9 +8,10 @@ public class Weapon {
     private final int rend;
     private final int damage;
 
-    private final DiceRoller diceRoller = new DiceRoller();
+    private final DiceRoller diceRoller;
 
-    public Weapon(int attacks, int toHit, int toWound, int rend, int damage) {
+    public Weapon(DiceRoller diceRoller, int attacks, int toHit, int toWound, int rend, int damage) {
+        this.diceRoller = diceRoller;
         this.attacks = attacks;
         this.toHit = toHit;
         this.toWound = toWound;
@@ -20,14 +21,14 @@ public class Weapon {
 
     public int rollHits(int numberOfAttacker, boolean reRoll, int rollModifier, int numberToReRoll) {
         if (numberToReRoll != 0) {
-            return diceRoller.rollDice(numberOfAttacker * attacks, toHit, rollModifier, numberToReRoll);
+            return diceRoller.rollDiceWithSpecificReRoll(numberOfAttacker * attacks, toHit, rollModifier, numberToReRoll);
         }
         return diceRoller.rollDice(numberOfAttacker * attacks, toHit, rollModifier, reRoll);
     }
 
     public int rollWounds(int numberOfWounds, boolean reRoll, int rollModifier, int numberToReRoll) {
         if (numberToReRoll != 0) {
-            return diceRoller.rollDice(numberOfWounds, toWound, rollModifier, numberToReRoll);
+            return diceRoller.rollDiceWithSpecificReRoll(numberOfWounds, toWound, rollModifier, numberToReRoll);
         }
         return diceRoller.rollDice(numberOfWounds, toWound, rollModifier, reRoll);
     }

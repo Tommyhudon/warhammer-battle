@@ -13,9 +13,10 @@ public class Unit {
     private final Weapon weapon;
     private final Abilities abilities;
 
-    private final DiceRoller diceRoller = new DiceRoller();
+    private final DiceRoller diceRoller;
 
-    public Unit(String name, int number, int save, int wound, int totalWounds, Weapon weapon, Abilities abilities) {
+    public Unit(DiceRoller diceRoller, String name, int number, int save, int wound, int totalWounds, Weapon weapon, Abilities abilities) {
+        this.diceRoller = diceRoller;
         this.name = name;
         this.number = number;
         this.save = save;
@@ -43,7 +44,7 @@ public class Unit {
 
     private int rollSaves(int numberOfSaves, int rend) {
         if (abilities.getReRollSavesOn() != 0) {
-            return diceRoller.rollDice(numberOfSaves, save, rend, abilities.getReRollSavesOn());
+            return diceRoller.rollDiceWithSpecificReRoll(numberOfSaves, save, rend, abilities.getReRollSavesOn());
         }
         return diceRoller.rollDice(numberOfSaves, save, rend, abilities.isReRollAllFailSaves());
     }
@@ -56,6 +57,7 @@ public class Unit {
     @Override
     public Unit clone() {
         return new Unit(
+                diceRoller,
                 name,
                 number,
                 save,

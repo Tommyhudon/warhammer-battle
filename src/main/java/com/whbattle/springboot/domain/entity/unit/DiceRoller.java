@@ -4,7 +4,11 @@ import com.whbattle.springboot.domain.entity.shared.Die;
 
 public class DiceRoller {
 
-    private final Die die = new Die();
+    private final Die die;
+
+    public DiceRoller(Die die){
+        this.die = die;
+    }
 
     //RollDice with  reRoll
     public int rollDice(int numberOfRoll, int numberToRoll, int rollModifier, boolean reRoll) {
@@ -13,7 +17,7 @@ public class DiceRoller {
         for (int i = 0; i < numberOfRoll; i ++){
             int roll = die.roll();
 
-            if (roll >= numberToRoll + rollModifier) {
+            if (roll + rollModifier >= numberToRoll) {
                 successfulRolls ++;
             } else if (reRoll) {
                 successfulRolls = successfulRolls + this.rollDice(1, numberToRoll, rollModifier, false);
@@ -24,13 +28,13 @@ public class DiceRoller {
     }
 
     //RollDice with reRoll on specific number
-    public int rollDice(int numberOfRoll, int numberToRoll, int rollModifier, int numberToReRoll) {
+    public int rollDiceWithSpecificReRoll(int numberOfRoll, int numberToRoll, int rollModifier, int numberToReRoll) {
         int successfulRolls = 0;
 
         for (int i = 0; i < numberOfRoll; i ++){
             int roll = die.roll();
 
-            if (roll >= numberToRoll + rollModifier) {
+            if (roll + rollModifier >= numberToRoll) {
                 successfulRolls ++;
             } else if (roll == numberToReRoll) {
                 successfulRolls = successfulRolls + this.rollDice(1, numberToRoll, rollModifier, false);
