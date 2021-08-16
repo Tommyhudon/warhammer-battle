@@ -6,7 +6,7 @@ Small project to compare units strength in warhammer AoS
 
 To run a simulation you need to use the end point POST/battle_report with a body.
 
-##body exemple
+## body exemple
 ```json
 [
     {
