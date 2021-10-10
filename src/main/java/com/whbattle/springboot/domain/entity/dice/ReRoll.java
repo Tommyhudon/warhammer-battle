@@ -1,7 +1,7 @@
-package com.whbattle.springboot.domain.entity.unit;
+package com.whbattle.springboot.domain.entity.dice;
 
 //value object for reRoll
-public class Abilities {
+public class ReRoll {
     private final boolean reRollAllFailHits;
     private final int reRollHitsOn;
     private final boolean reRollAllFailWounds;
@@ -9,7 +9,7 @@ public class Abilities {
     private final boolean reRollAllFailSaves;
     private final int reRollSavesOn;
 
-    public Abilities(boolean reRollAllFailHits, int reRollHitsOn, boolean reRollAllFailWounds, int getReRollWoundsOn, boolean reRollAllFailSaves, int reRollSavesOn) {
+    public ReRoll(boolean reRollAllFailHits, int reRollHitsOn, boolean reRollAllFailWounds, int getReRollWoundsOn, boolean reRollAllFailSaves, int reRollSavesOn) {
         this.reRollAllFailHits = reRollAllFailHits;
         this.reRollHitsOn = reRollHitsOn;
         this.reRollAllFailWounds = reRollAllFailWounds;

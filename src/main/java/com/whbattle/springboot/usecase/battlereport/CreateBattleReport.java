@@ -1,8 +1,10 @@
 package com.whbattle.springboot.usecase.battlereport;
 
-import com.whbattle.springboot.domain.entity.BattleReport;
+import com.whbattle.springboot.domain.entity.battleReport.BattleReport;
 import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.domain.entity.unit.attack.Attack;
+import com.whbattle.springboot.usecase.unit.dto.UnitDto;
+import com.whbattle.springboot.usecase.unit.dto.UnitMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,12 +13,17 @@ import java.util.*;
 @Component
 public class CreateBattleReport {
 
-    @Autowired
-    public CreateBattleReport(){ }
+    private final UnitMapper unitMapper;
 
-    public BattleReport create(Unit[] units) {
+    @Autowired
+    public CreateBattleReport(UnitMapper unitMapper){
+        this.unitMapper = unitMapper;
+    }
+
+    public BattleReport create(UnitDto[] unitDtos) {
         int nbOfWin = 0;
         int NUMBER_OF_BATTLE = 10000;
+        Unit[] units = unitMapper.mapUnitList(unitDtos);
 
 
         for (int i = 0; i < NUMBER_OF_BATTLE; i++) {

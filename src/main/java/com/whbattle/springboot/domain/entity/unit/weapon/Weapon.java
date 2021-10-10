@@ -1,5 +1,5 @@
 package com.whbattle.springboot.domain.entity.unit.weapon;
-import com.whbattle.springboot.domain.entity.unit.DiceRoller;
+import com.whbattle.springboot.domain.entity.dice.DiceRoller;
 
 public class Weapon {
     private final int attacks;

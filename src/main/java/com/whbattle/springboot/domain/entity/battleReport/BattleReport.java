@@ -1,4 +1,4 @@
-package com.whbattle.springboot.domain.entity;
+package com.whbattle.springboot.domain.entity.battleReport;
 
 import com.whbattle.springboot.domain.entity.unit.Unit;
 

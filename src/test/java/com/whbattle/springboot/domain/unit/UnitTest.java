@@ -1,7 +1,7 @@
 package com.whbattle.springboot.domain.unit;
 
-import com.whbattle.springboot.domain.entity.unit.Abilities;
-import com.whbattle.springboot.domain.entity.unit.DiceRoller;
+import com.whbattle.springboot.domain.entity.dice.ReRoll;
+import com.whbattle.springboot.domain.entity.dice.DiceRoller;
 import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.domain.entity.unit.attack.Attack;
 import com.whbattle.springboot.domain.entity.unit.weapon.Weapon;
@@ -22,7 +22,7 @@ public class UnitTest {
     Weapon weapon;
 
     @Mock
-    Abilities abilities;
+    ReRoll reRoll;
 
     @Mock
     Attack attack;
@@ -34,7 +34,7 @@ public class UnitTest {
 
     @Before
     public void setup() {
-       DEFAULT_UNIT = new Unit(diceRoller,"default unit", 20, 4, 4, 20, weapon, abilities);
+       DEFAULT_UNIT = new Unit(diceRoller,"default unit", 20, 4, 4, 20, weapon, reRoll);
     }
 
     @Test

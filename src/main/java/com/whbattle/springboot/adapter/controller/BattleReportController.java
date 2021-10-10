@@ -1,8 +1,8 @@
 package com.whbattle.springboot.adapter.controller;
 
-import com.whbattle.springboot.domain.entity.BattleReport;
-import com.whbattle.springboot.domain.entity.unit.Unit;
+import com.whbattle.springboot.domain.entity.battleReport.BattleReport;
 import com.whbattle.springboot.usecase.battlereport.CreateBattleReport;
+import com.whbattle.springboot.usecase.unit.dto.UnitDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class BattleReportController {
 
     @PostMapping("/battle_report")
     public ResponseEntity createBattleRapport(
-            @RequestBody Unit[] units) {
+            @RequestBody UnitDto[] units) {
 
         BattleReport battleReport = createBattleReport.create(units);
         return new ResponseEntity<String>(battleReport.battleReportMessage(), HttpStatus.OK);

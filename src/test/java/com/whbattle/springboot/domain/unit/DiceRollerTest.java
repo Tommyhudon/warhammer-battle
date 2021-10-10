@@ -1,7 +1,7 @@
 package com.whbattle.springboot.domain.unit;
 
-import com.whbattle.springboot.domain.entity.shared.Die;
-import com.whbattle.springboot.domain.entity.unit.DiceRoller;
+import com.whbattle.springboot.domain.entity.dice.Die;
+import com.whbattle.springboot.domain.entity.dice.DiceRoller;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

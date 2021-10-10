@@ -1,6 +1,6 @@
-package com.whbattle.springboot.domain.entity.unit;
+package com.whbattle.springboot.domain.entity.dice;
 
-import com.whbattle.springboot.domain.entity.shared.Die;
+import com.whbattle.springboot.domain.entity.dice.Die;
 
 public class DiceRoller {
 
