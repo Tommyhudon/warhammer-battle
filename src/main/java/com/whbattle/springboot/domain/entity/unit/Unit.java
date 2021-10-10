@@ -1,5 +1,7 @@
 package com.whbattle.springboot.domain.entity.unit;
 
+import com.whbattle.springboot.domain.entity.dice.DiceRoller;
+import com.whbattle.springboot.domain.entity.dice.ReRoll;
 import com.whbattle.springboot.domain.entity.unit.weapon.Weapon;
 import com.whbattle.springboot.domain.entity.unit.attack.Attack;
 
@@ -11,18 +13,19 @@ public class Unit {
     private final int wound;
     private int totalWounds;
     private final Weapon weapon;
-    private final Abilities abilities;
+    private final ReRoll reRoll;
 
-    private final DiceRoller diceRoller = new DiceRoller();
+    private final DiceRoller diceRoller;
 
-    public Unit(String name, int number, int save, int wound, int totalWounds, Weapon weapon, Abilities abilities) {
+    public Unit(DiceRoller diceRoller, String name, int number, int save, int wound, int totalWounds, Weapon weapon, ReRoll reRoll) {
+        this.diceRoller = diceRoller;
         this.name = name;
         this.number = number;
         this.save = save;
         this.wound = wound;
         this.totalWounds = totalWounds;
         this.weapon = weapon;
-        this.abilities = abilities;
+        this.reRoll = reRoll;
     }
 
     public boolean isDead() {
@@ -31,8 +34,8 @@ public class Unit {
 
     public Attack rollAttacks() {
         int ZERO_FOR_NOW = 0;
-        int successfulHits = weapon.rollHits(number, abilities.isReRollAllFailHits(), ZERO_FOR_NOW, abilities.getReRollHitsOn());
-        int successfulWounds = weapon.rollWounds(successfulHits, abilities.isReRollAllFailWounds(), ZERO_FOR_NOW, abilities.getGetReRollWoundsOn());
+        int successfulHits = weapon.rollHits(number, reRoll.isReRollAllFailHits(), ZERO_FOR_NOW, reRoll.getReRollHitsOn());
+        int successfulWounds = weapon.rollWounds(successfulHits, reRoll.isReRollAllFailWounds(), ZERO_FOR_NOW, reRoll.getGetReRollWoundsOn());
         return new Attack(successfulWounds, weapon.getDamage(), weapon.getRend());
     }
 
@@ -42,10 +45,10 @@ public class Unit {
     }
 
     private int rollSaves(int numberOfSaves, int rend) {
-        if (abilities.getReRollSavesOn() != 0) {
-            return diceRoller.rollDice(numberOfSaves, save, rend, abilities.getReRollSavesOn());
+        if (reRoll.getReRollSavesOn() != 0) {
+            return diceRoller.rollDiceWithSpecificReRoll(numberOfSaves, save, rend, reRoll.getReRollSavesOn());
         }
-        return diceRoller.rollDice(numberOfSaves, save, rend, abilities.isReRollAllFailSaves());
+        return diceRoller.rollDice(numberOfSaves, save, rend, reRoll.isReRollAllFailSaves());
     }
 
     private void resolvesWounds(int failedSaves, int attackDamage) {
@@ -56,13 +59,14 @@ public class Unit {
     @Override
     public Unit clone() {
         return new Unit(
+                diceRoller,
                 name,
                 number,
                 save,
                 wound,
                 totalWounds,
                 weapon,
-                abilities);
+                reRoll);
     }
 
     public String getName() {
