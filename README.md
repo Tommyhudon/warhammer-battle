@@ -16,17 +16,17 @@ To run a simulation you need to use the end point POST/battle_report with a body
         "wound": 2,
         "totalWounds": 20,
         "weapon" : {
-                    "attacks": 2,
-                    "toHit": 4,
-                    "toWound": 3,
-                    "rend": 0,
-                    "damage": 1
+            "attacks": 2,
+            "toHit": 4,
+            "toWound": 3,
+            "rend": 0,
+            "damage": 1
         },
         "reRoll" : {
-                    "reRollAllFailHits": false,
-                    "reRollAllFailWounds": false,
-                    "reRollAllFailSaves": false,
-                    "reRollSavesOn": 1
+            "reRollAllFailHits": false,
+            "reRollAllFailWounds": false,
+            "reRollAllFailSaves": false,
+            "reRollSavesOn": 1
         }
     },
     {
@@ -43,9 +43,9 @@ To run a simulation you need to use the end point POST/battle_report with a body
             "damage": 1
         },
         "reRoll" : {
-                    "reRollAllFailHits": true,
-                    "reRollAllFailWounds": false,
-                    "reRollAllFailSaves": false
+            "reRollAllFailHits": false,
+            "reRollAllFailWounds": false,
+            "reRollAllFailSaves": false
         }
     }
 ]
