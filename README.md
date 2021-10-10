@@ -22,7 +22,7 @@ To run a simulation you need to use the end point POST/battle_report with a body
                     "rend": 0,
                     "damage": 1
         },
-        "abilities" : {
+        "reRoll" : {
                     "reRollAllFailHits": false,
                     "reRollAllFailWounds": false,
                     "reRollAllFailSaves": false,
@@ -42,7 +42,7 @@ To run a simulation you need to use the end point POST/battle_report with a body
             "rend": 0,
             "damage": 1
         },
-        "abilities" : {
+        "reRoll" : {
                     "reRollAllFailHits": true,
                     "reRollAllFailWounds": false,
                     "reRollAllFailSaves": false
