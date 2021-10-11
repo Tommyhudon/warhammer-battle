@@ -21,10 +21,10 @@ public class BattleReportController {
     }
 
     @PostMapping("/battle_report")
-    public ResponseEntity createBattleRapport(
+    public ResponseEntity<String> createBattleRapport(
             @RequestBody UnitDto[] units) {
 
         BattleReport battleReport = createBattleReport.create(units);
-        return new ResponseEntity<String>(battleReport.battleReportMessage(), HttpStatus.OK);
+        return new ResponseEntity<>(battleReport.battleReportMessage(), HttpStatus.OK);
     }
 }

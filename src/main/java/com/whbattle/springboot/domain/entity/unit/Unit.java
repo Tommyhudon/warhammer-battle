@@ -2,8 +2,10 @@ package com.whbattle.springboot.domain.entity.unit;
 
 import com.whbattle.springboot.domain.entity.dice.DiceRoller;
 import com.whbattle.springboot.domain.entity.dice.ReRoll;
-import com.whbattle.springboot.domain.entity.unit.weapon.Weapon;
 import com.whbattle.springboot.domain.entity.unit.attack.Attack;
+import com.whbattle.springboot.domain.entity.unit.weapon.Weapon;
+
+import java.util.List;
 
 public class Unit {
 
@@ -14,10 +16,11 @@ public class Unit {
     private int totalWounds;
     private final Weapon weapon;
     private final ReRoll reRoll;
+    private final List<Effect> effects;
 
     private final DiceRoller diceRoller;
 
-    public Unit(DiceRoller diceRoller, String name, int number, int save, int wound, int totalWounds, Weapon weapon, ReRoll reRoll) {
+    public Unit(DiceRoller diceRoller, String name, int number, int save, int wound, int totalWounds, Weapon weapon, ReRoll reRoll, List<Effect> effects) {
         this.diceRoller = diceRoller;
         this.name = name;
         this.number = number;
@@ -26,6 +29,7 @@ public class Unit {
         this.totalWounds = totalWounds;
         this.weapon = weapon;
         this.reRoll = reRoll;
+        this.effects = effects;
     }
 
     public boolean isDead() {
@@ -33,9 +37,18 @@ public class Unit {
     }
 
     public Attack rollAttacks() {
-        int ZERO_FOR_NOW = 0;
-        int successfulHits = weapon.rollHits(number, reRoll.isReRollAllFailHits(), ZERO_FOR_NOW, reRoll.getReRollHitsOn());
-        int successfulWounds = weapon.rollWounds(successfulHits, reRoll.isReRollAllFailWounds(), ZERO_FOR_NOW, reRoll.getGetReRollWoundsOn());
+        int toHitModifier = 0;
+        int toWoundModifier = 0;
+
+        for (Effect effect : this.effects) {
+            if (effect.isActive()) {
+                toHitModifier += effect.getToHitModifier();
+                toWoundModifier += effect.getToWoundModifier();
+            }
+        }
+
+        int successfulHits = weapon.rollHits(number, reRoll.isReRollAllFailHits(), toHitModifier, reRoll.getReRollHitsOn());
+        int successfulWounds = weapon.rollWounds(successfulHits, reRoll.isReRollAllFailWounds(), toWoundModifier, reRoll.getGetReRollWoundsOn());
         return new Attack(successfulWounds, weapon.getDamage(), weapon.getRend());
     }
 
@@ -53,7 +66,7 @@ public class Unit {
 
     private void resolvesWounds(int failedSaves, int attackDamage) {
         totalWounds = totalWounds - failedSaves * attackDamage;
-        number = (int) Math.ceil( (float) totalWounds/wound);
+        number = (int) Math.ceil((float) totalWounds / wound);
     }
 
     @Override
@@ -66,7 +79,8 @@ public class Unit {
                 wound,
                 totalWounds,
                 weapon,
-                reRoll);
+                reRoll,
+                effects);
     }
 
     public String getName() {
@@ -75,5 +89,16 @@ public class Unit {
 
     public int getNumber() {
         return number;
+    }
+
+    public void updateEffects(int turn) {
+        for (Effect effect : this.effects) {
+            if (effect.getStartTurn() == turn) {
+                effect.setActive(true);
+            }
+            if (effect.getEndTurn() == turn) {
+                effect.setActive(false);
+            }
+        }
     }
 }
