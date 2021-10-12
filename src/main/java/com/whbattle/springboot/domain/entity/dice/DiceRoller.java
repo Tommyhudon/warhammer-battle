@@ -27,6 +27,10 @@ public class DiceRoller {
         return successfulRolls;
     }
 
+    public int rollDie(int rollModifier) {
+        return die.roll() + rollModifier;
+    }
+
     //RollDice with reRoll on specific number
     public int rollDiceWithSpecificReRoll(int numberOfRoll, int numberToRoll, int rollModifier, int numberToReRoll) {
         int successfulRolls = 0;
