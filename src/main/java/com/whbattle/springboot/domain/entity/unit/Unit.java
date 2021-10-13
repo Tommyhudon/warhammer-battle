@@ -147,25 +147,6 @@ public class Unit {
         modelLostDuringRound = unit.getModelLostDuringRound();
     }
 
-    @Override
-    public Unit clone() {
-        return new Unit(
-                diceRoller,
-                name,
-                number,
-                save,
-                wound,
-                totalWounds,
-                attacks,
-                toHit,
-                toWound,
-                rend,
-                damage,
-                bravery,
-                reRoll,
-                effects);
-    }
-
     public void setModelLostDuringRound(int numberOfModel) {
         modelLostDuringRound = numberOfModel;
     }

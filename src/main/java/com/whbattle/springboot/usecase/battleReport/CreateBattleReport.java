@@ -29,15 +29,15 @@ public class CreateBattleReport {
         int nbOfWin = 0;
         int nbOfSurvivors = 0;
         int NUMBER_OF_BATTLE = 10000;
+        String mainUnitName = unitDtos[0].name;
         List<Unit> units = unitMapper.mapUnitList(unitDtos);
         saveUnitsState(units);
 
         for (int i = 0; i < NUMBER_OF_BATTLE; i++) {
-            // List<Unit> shuffledUnits = this.cloneUnits(unitMapper.mapUnitList(unitDtos));
             Collections.shuffle(units, new Random());
 
             Unit winner = battle(units);
-            if (winner.getName().equals(units.get(0).getName())) {
+            if (winner.getName().equals(mainUnitName)) { //problem ici
                 nbOfWin++;
                 nbOfSurvivors += winner.getNumber();
             }
@@ -84,16 +84,6 @@ public class CreateBattleReport {
         }
 
         return winner;
-    }
-
-    private List<Unit> cloneUnits(Unit[] units) {
-        List<Unit> resultList = new ArrayList<>();
-
-        for (Unit unit : units) {
-            resultList.add(unit.clone());
-        }
-
-        return resultList;
     }
 
     private void saveUnitsState(List<Unit> units) {
