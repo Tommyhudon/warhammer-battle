@@ -117,7 +117,7 @@ public class Unit {
 
         if (braveryRoll > 0) {
             if (totalWounds % wound != 0) {
-                totalWounds = totalWounds - totalWounds % wound;
+                totalWounds -= totalWounds % wound;
                 number --;
                 braveryRoll --;
             }
