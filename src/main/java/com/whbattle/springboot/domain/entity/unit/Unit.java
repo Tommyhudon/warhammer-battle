@@ -51,12 +51,12 @@ public class Unit {
         int toHitModifier = 0;
         int toWoundModifier = 0;
 
-        //for (Effect effect : this.effects) {
-        //  if (effect.isActive()) {
-        //   toHitModifier += effect.getToHitModifier();
-        //   toWoundModifier += effect.getToWoundModifier();
-        //}
-        // }
+        for (Effect effect : this.effects) {
+            if (effect.isActive()) {
+                toHitModifier += effect.getToHitModifier();
+                toWoundModifier += effect.getToWoundModifier();
+            }
+        }
 
         int successfulHits = this.rollHits(number, reRoll.isReRollAllFailHits(), toHitModifier, reRoll.getReRollHitsOn());
         int successfulWounds = this.rollWounds(successfulHits, reRoll.isReRollAllFailWounds(), toWoundModifier, reRoll.getGetReRollWoundsOn());

@@ -18,7 +18,7 @@ import java.util.Random;
 public class CreateBattleReport {
 
     private final UnitMapper unitMapper;
-    private final List<UnitMemento> initialBattleState = new ArrayList<>();
+    private List<UnitMemento> initialBattleState = new ArrayList<>();
 
     @Autowired
     public CreateBattleReport(UnitMapper unitMapper) {
@@ -60,8 +60,8 @@ public class CreateBattleReport {
 
             currentTurn++;
 
-            // unit1.updateEffects(currentTurn);
-            // unit2.updateEffects(currentTurn);
+            unit1.updateEffects(currentTurn);
+            unit2.updateEffects(currentTurn);
 
             Attack attack = unit1.rollAttacks();
             unit2.resolveDamage(attack);
@@ -97,9 +97,11 @@ public class CreateBattleReport {
     }
 
     private void saveUnitsState(List<Unit> units) {
+        List<UnitMemento> currentBattleInitialState = new ArrayList<>();
         for (Unit unit : units) {
-            initialBattleState.add(unit.saveState());
+            currentBattleInitialState.add(unit.saveState());
         }
+        initialBattleState = currentBattleInitialState;
     }
 
     private void restoreUnitsState(List<Unit> units) {
