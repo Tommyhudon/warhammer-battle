@@ -121,7 +121,7 @@ public class Unit {
                 number --;
                 braveryRoll --;
             }
-            number = number - braveryRoll;
+            number -= braveryRoll;
         }
     }
 
