@@ -6,23 +6,19 @@ import com.whbattle.springboot.domain.entity.unit.Effect;
 import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.usecase.effect.dto.dto.EffectDto;
 import com.whbattle.springboot.usecase.effect.dto.dto.EffectMapper;
-import com.whbattle.springboot.usecase.weapon.dto.WeaponMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class UnitMapper {
 
     @Autowired
-    private final WeaponMapper weaponMapper;
-
-    @Autowired
     private final EffectMapper effectMapper;
 
-    public UnitMapper(WeaponMapper weaponMapper, EffectMapper effectMapper) {
-        this.weaponMapper = weaponMapper;
+    public UnitMapper(EffectMapper effectMapper) {
         this.effectMapper = effectMapper;
     }
 
@@ -44,10 +40,10 @@ public class UnitMapper {
                 mapEffectList(unitDto.effects));
     }
 
-    public Unit[] mapUnitList(UnitDto[] unitDtos) {
-        Unit[] units = new Unit[unitDtos.length];
-        for (int i = 0; i < unitDtos.length; i++) {
-            units[i] = this.mapUnit(unitDtos[i]);
+    public List<Unit> mapUnitList(UnitDto[] unitDtos) {
+        List<Unit> units = new ArrayList<>();
+        for (UnitDto unitDto : unitDtos) {
+            units.add(this.mapUnit(unitDto));
         }
         return units;
     }

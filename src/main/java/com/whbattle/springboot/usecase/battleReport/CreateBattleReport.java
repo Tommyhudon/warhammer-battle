@@ -2,6 +2,7 @@ package com.whbattle.springboot.usecase.battleReport;
 
 import com.whbattle.springboot.domain.entity.battleReport.BattleReport;
 import com.whbattle.springboot.domain.entity.unit.Unit;
+import com.whbattle.springboot.domain.entity.unit.UnitMemento;
 import com.whbattle.springboot.domain.entity.unit.attack.Attack;
 import com.whbattle.springboot.usecase.unit.dto.UnitDto;
 import com.whbattle.springboot.usecase.unit.dto.UnitMapper;
@@ -17,6 +18,7 @@ import java.util.Random;
 public class CreateBattleReport {
 
     private final UnitMapper unitMapper;
+    private final List<UnitMemento> initialBattleState = new ArrayList<>();
 
     @Autowired
     public CreateBattleReport(UnitMapper unitMapper) {
@@ -27,22 +29,24 @@ public class CreateBattleReport {
         int nbOfWin = 0;
         int nbOfSurvivors = 0;
         int NUMBER_OF_BATTLE = 10000;
-        Unit[] units = unitMapper.mapUnitList(unitDtos);
+        List<Unit> units = unitMapper.mapUnitList(unitDtos);
+        saveUnitsState(units);
 
         for (int i = 0; i < NUMBER_OF_BATTLE; i++) {
-            List<Unit> shuffledUnits = this.cloneUnits(unitMapper.mapUnitList(unitDtos));
-            Collections.shuffle(shuffledUnits, new Random());
+            // List<Unit> shuffledUnits = this.cloneUnits(unitMapper.mapUnitList(unitDtos));
+            Collections.shuffle(units, new Random());
 
-            Unit winner = this.battle(shuffledUnits);
-            if (winner.getName().equals(units[0].getName())) {
+            Unit winner = battle(units);
+            if (winner.getName().equals(units.get(0).getName())) {
                 nbOfWin++;
                 nbOfSurvivors += winner.getNumber();
             }
+            restoreUnitsState(units);
         }
 
         float probability = (float) nbOfWin / NUMBER_OF_BATTLE;
         float averageSurvivingModels = (float) nbOfSurvivors / NUMBER_OF_BATTLE;
-        return new BattleReport(probability, averageSurvivingModels, units[0], units[1]);
+        return new BattleReport(probability, averageSurvivingModels, units.get(0), units.get(1));
     }
 
     public Unit battle(List<Unit> units) {
@@ -56,8 +60,8 @@ public class CreateBattleReport {
 
             currentTurn++;
 
-            unit1.updateEffects(currentTurn);
-            unit2.updateEffects(currentTurn);
+            // unit1.updateEffects(currentTurn);
+            // unit2.updateEffects(currentTurn);
 
             Attack attack = unit1.rollAttacks();
             unit2.resolveDamage(attack);
@@ -90,5 +94,17 @@ public class CreateBattleReport {
         }
 
         return resultList;
+    }
+
+    private void saveUnitsState(List<Unit> units) {
+        for (Unit unit : units) {
+            initialBattleState.add(unit.saveState());
+        }
+    }
+
+    private void restoreUnitsState(List<Unit> units) {
+        for (int i = 0; i < units.size(); i++) {
+            units.get(i).restoreState(initialBattleState.get(i));
+        }
     }
 }
