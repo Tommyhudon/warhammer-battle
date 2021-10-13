@@ -1,4 +1,4 @@
-package com.whbattle.springboot.usecase.battlereport;
+package com.whbattle.springboot.usecase.battleReport;
 
 import com.whbattle.springboot.domain.entity.battleReport.BattleReport;
 import com.whbattle.springboot.domain.entity.unit.Unit;
@@ -53,6 +53,7 @@ public class CreateBattleReport {
         Unit unit2 = units.get(1);
 
         while (units.size() >= 2) {
+
             currentTurn++;
 
             unit1.updateEffects(currentTurn);
@@ -73,6 +74,9 @@ public class CreateBattleReport {
                 winner = unit2;
                 break;
             }
+
+            unit1.battleShock();
+            unit2.battleShock();
         }
 
         return winner;

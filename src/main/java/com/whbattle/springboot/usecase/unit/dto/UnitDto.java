@@ -10,7 +10,12 @@ public class UnitDto {
     public int save;
     public int wound;
     public int totalWounds;
-    public WeaponDto weapon;
+    public int attacks;
+    public int toHit;
+    public int toWound;
+    public int rend;
+    public int damage;
+    public int bravery;
     public ReRoll reRoll;
     public EffectDto[] effects;
 }

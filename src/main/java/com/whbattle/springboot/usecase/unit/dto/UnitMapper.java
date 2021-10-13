@@ -4,10 +4,8 @@ import com.whbattle.springboot.domain.entity.dice.DiceRoller;
 import com.whbattle.springboot.domain.entity.dice.Die;
 import com.whbattle.springboot.domain.entity.unit.Effect;
 import com.whbattle.springboot.domain.entity.unit.Unit;
-import com.whbattle.springboot.domain.entity.unit.weapon.Weapon;
 import com.whbattle.springboot.usecase.effect.dto.dto.EffectDto;
 import com.whbattle.springboot.usecase.effect.dto.dto.EffectMapper;
-import com.whbattle.springboot.usecase.weapon.dto.WeaponDto;
 import com.whbattle.springboot.usecase.weapon.dto.WeaponMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +34,12 @@ public class UnitMapper {
                 unitDto.save,
                 unitDto.wound,
                 unitDto.totalWounds,
-                mapWeapon(unitDto.weapon),
+                unitDto.attacks,
+                unitDto.toHit,
+                unitDto.toWound,
+                unitDto.rend,
+                unitDto.damage,
+                unitDto.bravery,
                 unitDto.reRoll,
                 mapEffectList(unitDto.effects));
     }
@@ -51,9 +54,5 @@ public class UnitMapper {
 
     public List<Effect> mapEffectList(EffectDto[] effectDtos) {
         return effectMapper.mapEffectList(effectDtos);
-    }
-
-    private Weapon mapWeapon(WeaponDto weaponDto) {
-        return weaponMapper.mapWeapon(weaponDto);
     }
 }

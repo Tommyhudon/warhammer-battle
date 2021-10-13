@@ -1,7 +1,7 @@
 package com.whbattle.springboot.adapter.controller;
 
 import com.whbattle.springboot.domain.entity.battleReport.BattleReport;
-import com.whbattle.springboot.usecase.battlereport.CreateBattleReport;
+import com.whbattle.springboot.usecase.battleReport.CreateBattleReport;
 import com.whbattle.springboot.usecase.unit.dto.UnitDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
