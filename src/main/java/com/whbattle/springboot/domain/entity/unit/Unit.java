@@ -148,6 +148,10 @@ public class Unit {
         modelLostDuringRound = numberOfModel;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
     public void setNumber(int number) {
         this.number = number;
     }
@@ -156,8 +160,9 @@ public class Unit {
         return name;
     }
 
-    public int getNumber() {
-        return number;
-    }
+    public int getTotalWounds() { return totalWounds; }
 
+    public void setTotalWounds(int totalWounds) {
+        this.totalWounds = totalWounds;
+    }
 }

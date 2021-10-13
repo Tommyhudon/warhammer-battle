@@ -38,12 +38,15 @@ public class UnitTest {
 
     Unit DEFAULT_UNIT;
     Unit MULTIPLE_ATTACK_UNIT;
+    Unit MULTIPLE_WOUND_UNIT;
 
     @Before
     public void setup() {
         List<Effect> effects = Collections.singletonList(effect);
-        DEFAULT_UNIT = new Unit(diceRoller, "default unit", 20, 4, 4, 20, 1, 4, 4, 0, 1, 6, reRoll, effects);        DEFAULT_UNIT = new Unit(diceRoller, "default unit", 20, 4, 4, 20, 1, 4, 4, 0, 1, 6, reRoll, effects);
-        MULTIPLE_ATTACK_UNIT = new Unit(diceRoller, "default unit", 20, 4, 4, 20, 2, 4, 4, 0, 1, 6, reRoll, effects);
+        DEFAULT_UNIT = new Unit(diceRoller, "default unit", 20, 4, 1, 20, 1, 4, 4, 0, 1, 6, reRoll, effects);
+        MULTIPLE_ATTACK_UNIT = new Unit(diceRoller, "default unit", 20, 4, 1, 20, 2, 4, 4, 0, 1, 6, reRoll, effects);
+        MULTIPLE_WOUND_UNIT = new Unit(diceRoller, "default unit", 5, 4, 4, 20, 2, 4, 4, 0, 1, 6, reRoll, effects);
+
     }
 
     @Test
@@ -78,10 +81,37 @@ public class UnitTest {
 
         DEFAULT_UNIT.setModelLostDuringRound(2);
         DEFAULT_UNIT.setNumber(18);
+        DEFAULT_UNIT.setTotalWounds(18);
 
         DEFAULT_UNIT.battleShock();
 
         Assert.assertEquals(DEFAULT_UNIT.getNumber(), 17);
+    }
+
+    @Test
+    public void GivenUnitWithModelWith4Wounds_whenFailingBraveryTestByOne_ShouldLose4totalWoundAnd1Number() {
+        when(diceRoller.rollDie(1)).thenReturn(7);
+
+        MULTIPLE_WOUND_UNIT.setModelLostDuringRound(1);
+        MULTIPLE_WOUND_UNIT.setTotalWounds(19);
+
+        MULTIPLE_WOUND_UNIT.battleShock();
+
+        Assert.assertEquals(MULTIPLE_WOUND_UNIT.getNumber(), 4);
+        Assert.assertEquals(MULTIPLE_WOUND_UNIT.getTotalWounds(), 16);
+    }
+
+    @Test
+    public void GivenUnitWithModelWith4WoundsAnd17woundsLeft_whenFailingBraveryTestByOne_ShouldLose1totalWoundAnd1Number() {
+        when(diceRoller.rollDie(1)).thenReturn(7);
+
+        MULTIPLE_WOUND_UNIT.setModelLostDuringRound(1);
+        MULTIPLE_WOUND_UNIT.setTotalWounds(17);
+
+        MULTIPLE_WOUND_UNIT.battleShock();
+
+        Assert.assertEquals(MULTIPLE_WOUND_UNIT.getNumber(), 4);
+        Assert.assertEquals(MULTIPLE_WOUND_UNIT.getTotalWounds(), 16);
     }
 
     @Test
