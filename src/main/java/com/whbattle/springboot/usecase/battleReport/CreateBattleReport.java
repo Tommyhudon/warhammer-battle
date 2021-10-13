@@ -18,7 +18,7 @@ import java.util.Random;
 public class CreateBattleReport {
 
     private final UnitMapper unitMapper;
-    private List<UnitMemento> initialBattleState = new ArrayList<>();
+    private List<UnitMemento> initialUnitsState = new ArrayList<>();
 
     @Autowired
     public CreateBattleReport(UnitMapper unitMapper) {
@@ -37,7 +37,7 @@ public class CreateBattleReport {
             Collections.shuffle(units, new Random());
 
             Unit winner = battle(units);
-            if (winner.getName().equals(mainUnitName)) { //problem ici
+            if (winner.getName().equals(mainUnitName)) {
                 nbOfWin++;
                 nbOfSurvivors += winner.getNumber();
             }
@@ -91,12 +91,12 @@ public class CreateBattleReport {
         for (Unit unit : units) {
             currentBattleInitialState.add(unit.saveState());
         }
-        initialBattleState = currentBattleInitialState;
+        initialUnitsState = currentBattleInitialState;
     }
 
     private void restoreUnitsState(List<Unit> units) {
         for (int i = 0; i < units.size(); i++) {
-            units.get(i).restoreState(initialBattleState.get(i));
+            units.get(i).restoreState(initialUnitsState.get(i));
         }
     }
 }
