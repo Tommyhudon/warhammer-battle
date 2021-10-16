@@ -8,19 +8,19 @@ import java.util.List;
 
 public class Unit {
 
-    private final String name;
+    private String name;
     private int number;
-    private final int save;
-    private final int wound;
+    private int save;
+    private int wound;
     private int totalWounds;
-    private final int attacks;
-    private final int toHit;
-    private final int toWound;
-    private final int rend;
-    private final int damage;
-    private final int bravery;
-    private final ReRoll reRoll;
-    private final List<Effect> effects;
+    private int attacks;
+    private int toHit;
+    private int toWound;
+    private int rend;
+    private int damage;
+    private int bravery;
+    private ReRoll reRoll;
+    private List<Effect> effects;
     private final DiceRoller diceRoller;
     private int modelLostDuringRound;
 
@@ -40,6 +40,7 @@ public class Unit {
         this.reRoll = reRoll;
         this.effects = effects;
         modelLostDuringRound = 0;
+
     }
 
     public boolean isDead() {
@@ -59,7 +60,7 @@ public class Unit {
 
         int successfulHits = this.rollHits(number, reRoll.isReRollAllFailHits(), toHitModifier, reRoll.getReRollHitsOn());
         int successfulWounds = this.rollWounds(successfulHits, reRoll.isReRollAllFailWounds(), toWoundModifier, reRoll.getGetReRollWoundsOn());
-        return new Attack(successfulWounds,this.damage, this.rend);
+        return new Attack(successfulWounds, this.damage, this.rend);
     }
 
     public void resolveDamage(Attack attack) {
@@ -97,11 +98,11 @@ public class Unit {
     }
 
     private int calculateLostModel() {
-        return  (int) Math.ceil((float) totalWounds / wound);
+        return (int) Math.ceil((float) totalWounds / wound);
     }
 
     public void updateEffects(int turn) {
-        for (Effect effect : this.effects) {
+        for (Effect effect : effects) {
             if (effect.getStartTurn() == turn) {
                 effect.setActive(true);
             }
@@ -113,35 +114,37 @@ public class Unit {
 
     public void battleShock() {
         // 1 D 6 + le nb de model mort - bravery - bonus de nb
-        int braveryRoll = diceRoller.rollDie(modelLostDuringRound) - bravery - (int) Math.floor((float) number/10);
+        int braveryRoll = diceRoller.rollDie(modelLostDuringRound) - bravery - (int) Math.floor((float) number / 10);
 
         if (braveryRoll > 0) {
             if (totalWounds % wound != 0) {
                 totalWounds -= totalWounds % wound;
-                number --;
-                braveryRoll --;
+                number--;
+                braveryRoll--;
             }
             number -= braveryRoll;
         }
     }
 
-    @Override
-    public Unit clone() {
-        return new Unit(
-                diceRoller,
-                name,
-                number,
-                save,
-                wound,
-                totalWounds,
-                attacks,
-                toHit,
-                toWound,
-                rend,
-                damage,
-                bravery,
-                reRoll,
-                effects);
+    public UnitMemento saveState() {
+        return new UnitMemento(name, number, save, wound, totalWounds, attacks, toHit, toWound, rend, damage, bravery, reRoll, effects, modelLostDuringRound);
+    }
+
+    public void restoreState(UnitMemento unit) {
+        name = unit.getName();
+        number = unit.getNumber();
+        save = unit.getSave();
+        wound = unit.getWound();
+        totalWounds = unit.getTotalWounds();
+        attacks = unit.getAttacks();
+        toHit = unit.getToHit();
+        toWound = unit.getToWound();
+        rend = unit.getRend();
+        damage = unit.getDamage();
+        bravery = unit.getBravery();
+        reRoll = unit.getReRoll();
+        effects = unit.getEffects();
+        modelLostDuringRound = unit.getModelLostDuringRound();
     }
 
     public void setModelLostDuringRound(int numberOfModel) {
@@ -160,7 +163,9 @@ public class Unit {
         return name;
     }
 
-    public int getTotalWounds() { return totalWounds; }
+    public int getTotalWounds() {
+        return totalWounds;
+    }
 
     public void setTotalWounds(int totalWounds) {
         this.totalWounds = totalWounds;

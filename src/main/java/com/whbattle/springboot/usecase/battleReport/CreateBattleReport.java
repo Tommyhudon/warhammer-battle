@@ -2,6 +2,7 @@ package com.whbattle.springboot.usecase.battleReport;
 
 import com.whbattle.springboot.domain.entity.battleReport.BattleReport;
 import com.whbattle.springboot.domain.entity.unit.Unit;
+import com.whbattle.springboot.domain.entity.unit.UnitMemento;
 import com.whbattle.springboot.domain.entity.unit.attack.Attack;
 import com.whbattle.springboot.usecase.unit.dto.UnitDto;
 import com.whbattle.springboot.usecase.unit.dto.UnitMapper;
@@ -17,6 +18,7 @@ import java.util.Random;
 public class CreateBattleReport {
 
     private final UnitMapper unitMapper;
+    private List<UnitMemento> initialUnitsState = new ArrayList<>();
 
     @Autowired
     public CreateBattleReport(UnitMapper unitMapper) {
@@ -27,22 +29,24 @@ public class CreateBattleReport {
         int nbOfWin = 0;
         int nbOfSurvivors = 0;
         int NUMBER_OF_BATTLE = 10000;
-        Unit[] units = unitMapper.mapUnitList(unitDtos);
+        String mainUnitName = unitDtos[0].name;
+        List<Unit> units = unitMapper.mapUnitList(unitDtos);
+        saveUnitsState(units);
 
         for (int i = 0; i < NUMBER_OF_BATTLE; i++) {
-            List<Unit> shuffledUnits = this.cloneUnits(unitMapper.mapUnitList(unitDtos));
-            Collections.shuffle(shuffledUnits, new Random());
+            Collections.shuffle(units, new Random());
 
-            Unit winner = this.battle(shuffledUnits);
-            if (winner.getName().equals(units[0].getName())) {
+            Unit winner = battle(units);
+            if (winner.getName().equals(mainUnitName)) {
                 nbOfWin++;
                 nbOfSurvivors += winner.getNumber();
             }
+            restoreUnitsState(units);
         }
 
         float probability = (float) nbOfWin / NUMBER_OF_BATTLE;
         float averageSurvivingModels = (float) nbOfSurvivors / NUMBER_OF_BATTLE;
-        return new BattleReport(probability, averageSurvivingModels, units[0], units[1]);
+        return new BattleReport(probability, averageSurvivingModels, units.get(0), units.get(1));
     }
 
     public Unit battle(List<Unit> units) {
@@ -82,13 +86,17 @@ public class CreateBattleReport {
         return winner;
     }
 
-    private List<Unit> cloneUnits(Unit[] units) {
-        List<Unit> resultList = new ArrayList<>();
-
+    private void saveUnitsState(List<Unit> units) {
+        List<UnitMemento> currentBattleInitialState = new ArrayList<>();
         for (Unit unit : units) {
-            resultList.add(unit.clone());
+            currentBattleInitialState.add(unit.saveState());
         }
+        initialUnitsState = currentBattleInitialState;
+    }
 
-        return resultList;
+    private void restoreUnitsState(List<Unit> units) {
+        for (int i = 0; i < units.size(); i++) {
+            units.get(i).restoreState(initialUnitsState.get(i));
+        }
     }
 }
