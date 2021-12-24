@@ -1,6 +1,6 @@
 package com.whbattle.springboot.usecase.effect.dto.dto;
 
-import com.whbattle.springboot.domain.entity.unit.Effect;
+import com.whbattle.springboot.domain.entity.TemporaryModifier.effect.Effect;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ public class EffectMapper {
         return new Effect(
                 effectDto.toHitModifier,
                 effectDto.toWoundModifier,
+                effectDto.braveryModifier,
+                effectDto.saveModifier,
                 effectDto.startTurn,
                 effectDto.endTurn
         );

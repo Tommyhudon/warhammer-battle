@@ -2,11 +2,13 @@ package com.whbattle.springboot.usecase.unit.dto;
 
 import com.whbattle.springboot.domain.entity.dice.DiceRoller;
 import com.whbattle.springboot.domain.entity.dice.Die;
-import com.whbattle.springboot.domain.entity.unit.Effect;
+import com.whbattle.springboot.domain.entity.TemporaryModifier.numberModifier.NumberModifier;
+import com.whbattle.springboot.domain.entity.TemporaryModifier.effect.Effect;
 import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.usecase.effect.dto.dto.EffectDto;
 import com.whbattle.springboot.usecase.effect.dto.dto.EffectMapper;
-import com.whbattle.springboot.usecase.weapon.dto.WeaponMapper;
+import com.whbattle.springboot.usecase.numberModifier.dto.NumberModifierDto;
+import com.whbattle.springboot.usecase.numberModifier.dto.NumberModifierMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +18,14 @@ import java.util.List;
 public class UnitMapper {
 
     @Autowired
-    private final WeaponMapper weaponMapper;
-
-    @Autowired
     private final EffectMapper effectMapper;
 
-    public UnitMapper(WeaponMapper weaponMapper, EffectMapper effectMapper) {
-        this.weaponMapper = weaponMapper;
+    @Autowired
+    private final NumberModifierMapper numberModifierMapper;
+
+    public UnitMapper(EffectMapper effectMapper, NumberModifierMapper numberModifierMapper) {
         this.effectMapper = effectMapper;
+        this.numberModifierMapper = numberModifierMapper;
     }
 
     public Unit mapUnit(UnitDto unitDto) {
@@ -41,7 +43,8 @@ public class UnitMapper {
                 unitDto.damage,
                 unitDto.bravery,
                 unitDto.reRoll,
-                mapEffectList(unitDto.effects));
+                mapEffectList(unitDto.effects),
+                mapNumberBonusList(unitDto.numberModifier));
     }
 
     public Unit[] mapUnitList(UnitDto[] unitDtos) {
@@ -55,4 +58,6 @@ public class UnitMapper {
     public List<Effect> mapEffectList(EffectDto[] effectDtos) {
         return effectMapper.mapEffectList(effectDtos);
     }
+
+    public List<NumberModifier> mapNumberBonusList(NumberModifierDto[] numberBonusesDtos) { return numberModifierMapper.mapNumberBonusList(numberBonusesDtos); }
 }

@@ -1,8 +1,9 @@
 package com.whbattle.springboot.domain.unit;
 
 import com.whbattle.springboot.domain.entity.dice.DiceRoller;
-import com.whbattle.springboot.domain.entity.dice.ReRoll;
-import com.whbattle.springboot.domain.entity.unit.Effect;
+import com.whbattle.springboot.domain.entity.TemporaryModifier.numberModifier.NumberModifier;
+import com.whbattle.springboot.domain.entity.reroll.ReRoll;
+import com.whbattle.springboot.domain.entity.TemporaryModifier.effect.Effect;
 import com.whbattle.springboot.domain.entity.unit.Unit;
 import com.whbattle.springboot.domain.entity.unit.attack.Attack;
 import com.whbattle.springboot.domain.entity.unit.weapon.Weapon;
@@ -13,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +34,9 @@ public class UnitTest {
     Effect effect;
 
     @Mock
+    NumberModifier numberModifier;
+
+    @Mock
     DiceRoller diceRoller;
 
     Unit DEFAULT_UNIT;
@@ -43,9 +46,10 @@ public class UnitTest {
     @Before
     public void setup() {
         List<Effect> effects = Collections.singletonList(effect);
-        DEFAULT_UNIT = new Unit(diceRoller, "default unit", 20, 4, 1, 20, 1, 4, 4, 0, 1, 6, reRoll, effects);
-        MULTIPLE_ATTACK_UNIT = new Unit(diceRoller, "default unit", 20, 4, 1, 20, 2, 4, 4, 0, 1, 6, reRoll, effects);
-        MULTIPLE_WOUND_UNIT = new Unit(diceRoller, "default unit", 5, 4, 4, 20, 2, 4, 4, 0, 1, 6, reRoll, effects);
+        List<NumberModifier> numberModifiers = Collections.singletonList(numberModifier);
+        DEFAULT_UNIT = new Unit(diceRoller, "default unit", 20, 4, 1, 20, 1, 4, 4, 0, 1, 6, reRoll, effects, numberModifiers);
+        MULTIPLE_ATTACK_UNIT = new Unit(diceRoller, "default unit", 20, 4, 1, 20, 2, 4, 4, 0, 1, 6, reRoll, effects, numberModifiers);
+        MULTIPLE_WOUND_UNIT = new Unit(diceRoller, "default unit", 5, 4, 4, 20, 2, 4, 4, 0, 1, 6, reRoll, effects, numberModifiers);
 
     }
 
@@ -116,36 +120,56 @@ public class UnitTest {
 
     @Test
     public void whenRollingToHitWithNoSpecificReRoll_shouldJustRollDice() {
-        DEFAULT_UNIT.rollHits(1, false, 0, 0);
+        DEFAULT_UNIT.rollDice(1, false, 0, 4, 0);
 
         verify(diceRoller, times(1)).rollDice(1, 4, 0, false);
     }
 
     @Test
     public void whenRollingToHitWithSpecificReRoll_shouldReRollSpecificNumber() {
-        DEFAULT_UNIT.rollHits(1, false, 0, 1);
+        DEFAULT_UNIT.rollDice(1, false, 0, 4, 1);
 
         verify(diceRoller, times(1)).rollDiceWithSpecificReRoll(1, 4, 0, 1);
     }
 
     @Test
     public void whenRollingToWoundWithNoSpecificReRoll_shouldJustRollDice() {
-        DEFAULT_UNIT.rollHits(1, false, 0, 0);
+        DEFAULT_UNIT.rollDice(1, false, 0, 4, 0);
 
         verify(diceRoller, times(1)).rollDice(1, 4, 0, false);
     }
 
     @Test
     public void whenRollingToWoundWithSpecificReRoll_shouldReRollSpecificNumber() {
-        DEFAULT_UNIT.rollHits(1, false, 0, 1);
+        DEFAULT_UNIT.rollDice(1, false, 0, 4, 1);
 
         verify(diceRoller, times(1)).rollDiceWithSpecificReRoll(1, 4, 0, 1);
     }
 
     @Test
     public void whenRollingToHitWithMultipleAttacks_shouldRollMoreDice() {
-        MULTIPLE_ATTACK_UNIT.rollHits(1, false, 0, 0);
+        MULTIPLE_ATTACK_UNIT.rollDice(1, false, 0, 4, 0);
 
         verify(diceRoller, times(1)).rollDice(2, 4, 0, false);
+    }
+
+    @Test
+    public void givenAUnitWithNumberModifierToHitAt20_whenRollingHitAt20_shouldApplyBonusToHit() {
+        when(numberModifier.getToHitModifier()).thenReturn(1);
+        when(numberModifier.getMinimumNumberForModifier()).thenReturn(20);
+
+        DEFAULT_UNIT.rollAttacks();
+
+        verify(diceRoller).rollDice(20, 4, 1, false);
+    }
+
+    @Test
+    public void givenAUnitWithNumberModifierToHitAt20_whenRollingHitAt19_shouldNotApplyBonusToHit() {
+        when(numberModifier.getMinimumNumberForModifier()).thenReturn(20);
+
+        DEFAULT_UNIT.setNumber(19);
+        DEFAULT_UNIT.rollAttacks();
+
+        verify(diceRoller).rollDice(19, 4, 0, false);
     }
 }

@@ -1,8 +1,8 @@
 package com.whbattle.springboot.usecase.unit.dto;
 
-import com.whbattle.springboot.domain.entity.dice.ReRoll;
+import com.whbattle.springboot.domain.entity.reroll.ReRoll;
 import com.whbattle.springboot.usecase.effect.dto.dto.EffectDto;
-import com.whbattle.springboot.usecase.weapon.dto.WeaponDto;
+import com.whbattle.springboot.usecase.numberModifier.dto.NumberModifierDto;
 
 public class UnitDto {
     public String name;
@@ -18,4 +18,5 @@ public class UnitDto {
     public int bravery;
     public ReRoll reRoll;
     public EffectDto[] effects;
+    public NumberModifierDto[] numberModifier;
 }

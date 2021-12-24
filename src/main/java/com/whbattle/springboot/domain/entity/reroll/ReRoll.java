@@ -1,4 +1,4 @@
-package com.whbattle.springboot.domain.entity.dice;
+package com.whbattle.springboot.domain.entity.reroll;
 
 //value object for reRoll
 public class ReRoll {
